@@ -1,0 +1,1 @@
+/home/luca/Projects/LCD\ project/rustSolver/target/debug/solver: /home/luca/Projects/LCD\ project/rustSolver/src/main.rs /home/luca/Projects/LCD\ project/rustSolver/src/parallel.rs /home/luca/Projects/LCD\ project/rustSolver/src/sequential.rs /home/luca/Projects/LCD\ project/rustSolver/src/sudoku.rs /home/luca/Projects/LCD\ project/rustSolver/src/utils.rs

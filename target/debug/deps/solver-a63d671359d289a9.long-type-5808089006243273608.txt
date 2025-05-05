@@ -1,0 +1,1 @@
+Cloned<Map<impl Iterator<Item = &Endpoints>, {closure@src/concurrent/network.rs:61:18: 61:28}>>

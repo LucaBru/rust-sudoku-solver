@@ -1,0 +1,3 @@
+[[Option<(mpsc::Sender<Box<(dyn Restriction + 'static)>>, mpsc::Receiver<Box<(dyn Restriction + 'static)>>)>; 9]]
+[[Option<(std::sync::mpsc::Sender<Box<(dyn Restriction + 'static)>>, std::sync::mpsc::Receiver<Box<(dyn Restriction + 'static)>>)>; 9]]
+[[Option<(std::sync::mpsc::Sender<Box<(dyn Restriction + 'static)>>, std::sync::mpsc::Receiver<Box<(dyn Restriction + 'static)>>)>; 9]; 9]
