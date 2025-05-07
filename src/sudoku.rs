@@ -1,4 +1,8 @@
-use std::{collections::HashSet, fmt::Display, usize};
+use std::{
+    collections::HashSet,
+    fmt::{Display, Write},
+    usize,
+};
 
 use crate::utils::Matrix;
 
@@ -27,7 +31,23 @@ impl Digits {
     }
 }
 
-impl Display for Digits {
+impl ToString for Puzzle {
+    fn to_string(&self) -> String {
+        let mut output = String::new();
+
+        for i in 0..9 {
+            for j in 0..9 {
+                let _ = output.write_str(
+                    format!("{} ", self.board.get(i, j).iter().next().unwrap()).as_str(),
+                );
+            }
+            output.push('\n');
+        }
+        output
+    }
+}
+
+/* impl Display for Digits {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let _ = write!(f, "[ ");
         self.0.iter().for_each(|digit| {
@@ -36,7 +56,7 @@ impl Display for Digits {
         write!(f, "]")
     }
 }
-
+ */
 #[derive(Clone)]
 pub struct Puzzle {
     board: Matrix<Digits, 9>,
@@ -54,7 +74,7 @@ impl Puzzle {
             && self
                 .board
                 .box_neighbors_iter(row, clm)
-                .all(|cell| !cell.is_digit(num))
+                .all(|(_, cell)| !cell.is_digit(num))
     }
 
     pub fn get(&self, row: usize, clm: usize) -> Vec<usize> {
@@ -79,11 +99,5 @@ impl Puzzle {
             }
         }
         puzzle
-    }
-}
-
-impl ToString for Puzzle {
-    fn to_string(&self) -> String {
-        self.board.to_string()
     }
 }

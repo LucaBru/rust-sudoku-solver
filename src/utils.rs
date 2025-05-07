@@ -43,11 +43,11 @@ pub fn init_logging() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 #[derive(Clone)]
-pub struct Matrix<T: Default + Display, const N: usize> {
+pub struct Matrix<T: Default, const N: usize> {
     matrix: [[T; N]; N],
 }
 
-impl<T: Default + Display, const N: usize> Matrix<T, N> {
+impl<T: Default, const N: usize> Matrix<T, N> {
     pub fn row_neighbors_iter(&self, row: usize) -> impl Iterator<Item = &T> {
         assert!(row < N);
         self.matrix[row].iter()
@@ -58,7 +58,11 @@ impl<T: Default + Display, const N: usize> Matrix<T, N> {
         self.matrix.iter().map(move |row| &row[clm])
     }
 
-    pub fn box_neighbors_iter(&self, row: usize, clm: usize) -> impl Iterator<Item = &T> {
+    pub fn box_neighbors_iter(
+        &self,
+        row: usize,
+        clm: usize,
+    ) -> impl Iterator<Item = ((usize, usize), &T)> {
         assert!(row < N);
         assert!(clm < N);
         let box_size = N / 3;
@@ -66,7 +70,12 @@ impl<T: Default + Display, const N: usize> Matrix<T, N> {
         let leftmost_clm = clm / box_size * box_size;
 
         (0..box_size).flat_map(move |r| {
-            (0..box_size).map(move |c| &self.matrix[upper_row + r][leftmost_clm + c])
+            (0..box_size).map(move |c| {
+                (
+                    (r + upper_row, c + leftmost_clm),
+                    &self.matrix[upper_row + r][leftmost_clm + c],
+                )
+            })
         })
     }
 
@@ -89,7 +98,7 @@ impl<T: Default + Display, const N: usize> Matrix<T, N> {
     }
 }
 
-impl<T: Default + Display, const N: usize> ToString for Matrix<T, N> {
+/* impl<T: Default + Display, const N: usize> ToString for Matrix<T, N> {
     fn to_string(&self) -> String {
         let mut output = String::new();
         for i in 0..N {
@@ -100,4 +109,4 @@ impl<T: Default + Display, const N: usize> ToString for Matrix<T, N> {
         }
         output
     }
-}
+} */

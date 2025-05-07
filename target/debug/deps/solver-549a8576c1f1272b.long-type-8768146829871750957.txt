@@ -1,1 +1,0 @@
-(std::sync::mpsc::Sender<Box<(dyn Restriction + 'static)>>, std::sync::mpsc::Receiver<Box<(dyn Restriction + 'static)>>, std::sync::mpsc::Receiver<Box<(dyn Restriction + 'static)>>)

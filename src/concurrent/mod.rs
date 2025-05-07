@@ -1,4 +1,4 @@
 mod detective;
 mod network;
-mod restriction;
+mod rule;
 pub mod solver;

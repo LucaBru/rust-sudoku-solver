@@ -2,5 +2,6 @@
   "cSpell.words": [
     "boxs",
     "clms"
-  ]
+  ],
+  "editor.inlayHints.enabled": "offUnlessPressed"
 }

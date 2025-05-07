@@ -24,6 +24,14 @@ fn main() {
         [0, 0, 0, 8, 0, 6, 0, 0, 0],
     ])];
 
+    /*
+    digit 1 suspects:
+        row = [all 9 rows] it self included -> 
+        clm = [all 9 clms] it self included -> 0,8 1,8
+        box = [all 9 boxes] it self included -> 0,6 0,7 0,8 1,7 1,8
+    */
+
+
     let (tx, rx) = mpsc::channel();
 
     let timer_handle = thread::spawn(move || {
@@ -53,7 +61,7 @@ fn main() {
         parallel::solve(parallel_puzzle);
         msg.solution = parallel_puzzle.to_string();
         tx.send(msg).expect("Failed to send parallel timing");
-        /*/
+
         msg = Log {
             start: Instant::now(),
             solver_design: "concurrent".to_string(),
@@ -63,7 +71,7 @@ fn main() {
         let concurrent_puzzle = &mut puzzle.clone();
         concurrent::solver::solve(concurrent_puzzle);
         msg.solution = concurrent_puzzle.to_string();
-        tx.send(msg).expect("Failed to send concurrent timing"); */
+        tx.send(msg).expect("Failed to send concurrent timing");
     }
 
     drop(tx);

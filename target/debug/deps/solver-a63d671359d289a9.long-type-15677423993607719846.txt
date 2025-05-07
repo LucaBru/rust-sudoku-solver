@@ -1,1 +1,0 @@
-Option<(std::sync::mpsc::Sender<Box<dyn Restriction>>, Option<std::sync::mpsc::Receiver<Box<dyn Restriction>>>)>

@@ -1,38 +1,52 @@
+use crate::concurrent::detective::Candidates;
 use crate::concurrent::network::Network;
-use crate::concurrent::restriction::Discovery;
 use crate::parallel;
 use crate::sudoku::Puzzle;
-use std::sync::mpsc;
+use std::sync::{Arc, mpsc};
 use std::thread;
-/*
-pub fn solve(puzzle: &mut impl Puzzle) {
-    let mut network = Network::init(puzzle);
-    let (sol_tx, sol_rx) = mpsc::channel::<bool>();
-    let mut threads = 0;
+
+use super::detective::Cell;
+use super::rule::{Rule, RuleType};
+
+#[derive(Debug)]
+pub struct Clue {
+    pub row: usize,
+    pub clm: usize,
+    pub digit: usize,
+    pub reason: RuleType,
+}
+
+pub fn solve(puzzle: &mut Puzzle) {
+    let mut network = Network::new(puzzle);
+
+    let (discovery_tx, discovery_rx) = mpsc::channel();
+
     for r in 0..9 {
         for c in 0..9 {
-            let peers = Peers::new(&network, r, c);
-            if let Some(x) = puzzle.digit_at(r, c) {
-                peers.notify(Box::new(Discovery {
+            let candidates = Candidates::new(r, c, &network);
+            if puzzle.get(r, c).len() == 1 {
+                println!("Singleton at {} {}", r, c);
+                let rest = Rule {
+                    type_id: RuleType::Discovery,
                     row: r,
                     clm: c,
-                    digit: x,
-                }));
+                    digit: puzzle.get(r, c).get(0).unwrap().clone(),
+                };
+                candidates.notify(rest);
                 continue;
             }
-            let rx_res = network.get_rx_at(r, c).unwrap();
-            let sol_tx_clone = sol_tx.clone();
-            thread::spawn(move || investigate(r, c, peers, sol_tx_clone, rx_res));
-            threads += 1;
+            let mut det = Cell::new(r, c, candidates, network.take_rx_at(r, c).unwrap());
+            println!("thread spawned");
+            let discovery_tx_clone = discovery_tx.clone();
+            thread::spawn(move || det.investigate(discovery_tx_clone));
         }
     }
     drop(network);
-    let mut found = false;
-    for _ in 0..threads {
-        found = found || sol_rx.recv().unwrap();
+    drop(discovery_tx);
+    for clue in discovery_rx {
+        puzzle.set_at(clue.row, clue.clm, clue.digit);
+        println!("Found at {} {} {}", clue.row, clue.clm, clue.digit)
     }
-    if found == false {
-        parallel::solve(puzzle);
-    }
+
+    parallel::solve(puzzle);
 }
- */
