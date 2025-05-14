@@ -12,25 +12,41 @@ use utils::Log;
 
 fn main() {
     utils::init_logging().expect("Failed to initialize logging");
-    let boards = vec![("testSimpTechniques", [
-        [0, 0, 0, 1, 0, 4, 0, 0, 0],
-        [0, 0, 1, 0, 0, 0, 9, 0, 0],
-        [0, 9, 0, 7, 0, 3, 0, 6, 0],
-        [8, 0, 7, 0, 0, 0, 1, 0, 6],
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [3, 0, 4, 0, 0, 0, 5, 0, 9],
-        [0, 5, 0, 4, 0, 2, 0, 3, 0],
-        [0, 0, 8, 0, 0, 0, 6, 0, 0],
-        [0, 0, 0, 8, 0, 6, 0, 0, 0],
-    ])];
-
-    /*
-    digit 1 suspects:
-        row = [all 9 rows] it self included -> 
-        clm = [all 9 clms] it self included -> 0,8 1,8
-        box = [all 9 boxes] it self included -> 0,6 0,7 0,8 1,7 1,8
-    */
-
+    let boards = vec![
+        ("naiveBoard", [
+            [3, 1, 2, 6, 0, 5, 4, 0, 0],
+            [6, 0, 4, 2, 1, 0, 0, 8, 3],
+            [9, 0, 8, 0, 3, 0, 0, 2, 0],
+            [2, 4, 7, 5, 6, 0, 0, 3, 0],
+            [8, 6, 0, 1, 0, 0, 0, 0, 0],
+            [0, 0, 5, 3, 0, 2, 6, 7, 0],
+            [0, 8, 0, 0, 0, 0, 0, 0, 4],
+            [0, 3, 0, 0, 0, 0, 7, 6, 2],
+            [5, 0, 0, 0, 7, 0, 8, 0, 9],
+        ]),
+        ("testSimpTechniques", [
+            [0, 0, 0, 1, 0, 4, 0, 0, 0],
+            [0, 0, 1, 0, 0, 0, 9, 0, 0],
+            [0, 9, 0, 7, 0, 3, 0, 6, 0],
+            [8, 0, 7, 0, 0, 0, 1, 0, 6],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [3, 0, 4, 0, 0, 0, 5, 0, 9],
+            [0, 5, 0, 4, 0, 2, 0, 3, 0],
+            [0, 0, 8, 0, 0, 0, 6, 0, 0],
+            [0, 0, 0, 8, 0, 6, 0, 0, 0],
+        ]),
+        ("quiteHardBoard", [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 3, 0, 8, 5],
+            [0, 0, 1, 0, 2, 0, 0, 0, 0],
+            [0, 0, 0, 5, 0, 7, 0, 0, 0],
+            [0, 0, 4, 0, 0, 0, 1, 0, 0],
+            [0, 9, 0, 0, 0, 0, 0, 0, 0],
+            [5, 0, 0, 0, 0, 0, 0, 7, 3],
+            [0, 0, 2, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 4, 0, 0, 0, 9],
+        ]),
+    ];
 
     let (tx, rx) = mpsc::channel();
 
@@ -69,7 +85,7 @@ fn main() {
             solution: String::new(),
         };
         let concurrent_puzzle = &mut puzzle.clone();
-        concurrent::solver::solve(concurrent_puzzle);
+        concurrent::concurrent::solve(concurrent_puzzle);
         msg.solution = concurrent_puzzle.to_string();
         tx.send(msg).expect("Failed to send concurrent timing");
     }

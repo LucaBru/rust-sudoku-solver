@@ -1,8 +1,4 @@
-use std::{
-    collections::HashSet,
-    fmt::{Display, Write},
-    usize,
-};
+use std::{collections::HashSet, fmt::Write, usize};
 
 use crate::utils::Matrix;
 
@@ -20,10 +16,6 @@ impl Digits {
             return;
         }
         self.0 = HashSet::from([digit])
-    }
-
-    pub fn len(&self) -> usize {
-        self.0.len()
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &usize> {
@@ -47,16 +39,6 @@ impl ToString for Puzzle {
     }
 }
 
-/* impl Display for Digits {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let _ = write!(f, "[ ");
-        self.0.iter().for_each(|digit| {
-            let _ = write!(f, "{} ", digit);
-        });
-        write!(f, "]")
-    }
-}
- */
 #[derive(Clone)]
 pub struct Puzzle {
     board: Matrix<Digits, 9>,

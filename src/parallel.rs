@@ -25,6 +25,10 @@ pub fn solve(puzzle: &mut Puzzle) {
         }
     }
 
+    if candidates.len() == 0 {
+        return;
+    }
+
     let (tx, rx) = mpsc::channel();
     candidates.iter().for_each(|num| {
         let mut puzzle_clone = puzzle.clone();
@@ -34,13 +38,12 @@ pub fn solve(puzzle: &mut Puzzle) {
     });
 
     drop(tx);
-
     *puzzle = rx.recv().unwrap();
 }
 
 fn try_fill(puzzle: &mut Puzzle, tx: Sender<Puzzle>) {
     let result_found = sequential::solve(puzzle, 0, 0);
     if result_found {
-        tx.send((*puzzle).clone()).unwrap();
+        let _ = tx.send((*puzzle).clone());
     }
 }

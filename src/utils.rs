@@ -1,5 +1,4 @@
 use simplelog::*;
-use std::fmt::{Display, Write};
 use std::fs::{self, OpenOptions};
 use std::sync::mpsc::Receiver;
 use std::time::Instant;
